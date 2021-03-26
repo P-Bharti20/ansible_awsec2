@@ -1,0 +1,25 @@
+- hosts: 127.0.0.1
+  vars_files:
+  - aws_credentials.yml
+  gather_facts: False
+  tasks:
+  - name: "launching an ec2 instance on AWS"
+    ec2:
+      region: "ap-south-1"
+      image: ami-0a9d27a9f4f5c0efc
+      instance_type: t2.micro
+      vpc_subnet_id: subnet-e3ceb1af
+      instance_tags:
+        Name: os_ansible
+      state: present
+      wait: true
+      group_id: sg-0bdb9fd1b49b8749b
+      key_name: myAwsKey
+      assign_public_ip: yes
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+    register: ec2
+
+  - debug:
+      var: ec2.instances[0].public_ip
+
