@@ -1,0 +1,19 @@
+- hosts: ec2
+  remote_user: ec2-user
+  become: True
+  tasks:
+   - name: Install Apache WebServer
+     package:
+      name: "httpd"
+      state: present
+
+   - name: deploying web page
+     copy:
+      dest: "/var/www/html/index.html"
+      content: "This is my website from aws ec2...!\n"
+
+   - name: Starting httpd service
+     service:
+      name: "httpd"
+      state: restarted
+      enabled: yes
